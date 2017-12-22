@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Airplace_System", "Airplace_System\Airplace_System.vcxproj", "{01FDF8CD-17D0-4EB1-A149-104C1B127183}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{01FDF8CD-17D0-4EB1-A149-104C1B127183}.Debug|x64.ActiveCfg = Debug|x64
+		{01FDF8CD-17D0-4EB1-A149-104C1B127183}.Debug|x64.Build.0 = Debug|x64
+		{01FDF8CD-17D0-4EB1-A149-104C1B127183}.Debug|x86.ActiveCfg = Debug|Win32
+		{01FDF8CD-17D0-4EB1-A149-104C1B127183}.Debug|x86.Build.0 = Debug|Win32
+		{01FDF8CD-17D0-4EB1-A149-104C1B127183}.Release|x64.ActiveCfg = Release|x64
+		{01FDF8CD-17D0-4EB1-A149-104C1B127183}.Release|x64.Build.0 = Release|x64
+		{01FDF8CD-17D0-4EB1-A149-104C1B127183}.Release|x86.ActiveCfg = Release|Win32
+		{01FDF8CD-17D0-4EB1-A149-104C1B127183}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4084BF2-7A1C-4B97-9CDC-A80F0A5E3B85}
+	EndGlobalSection
+EndGlobal
