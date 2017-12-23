@@ -1,4 +1,0 @@
-﻿  AirplaceSystem.cpp
-c:\users\97263\desktop\airplace_system\airplace_system\airplacesystem.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-  Airplace_System.vcxproj -> C:\Users\97263\Desktop\Airplace_System\Debug\Airplace_System.exe
-  Airplace_System.vcxproj -> C:\Users\97263\Desktop\Airplace_System\Debug\Airplace_System.pdb (Partial PDB)
