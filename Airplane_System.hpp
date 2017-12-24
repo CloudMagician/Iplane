@@ -19,7 +19,8 @@
 #include <vector>
 using namespace std;
 
-class flight                        //定义一个航班信息的类
+//定义一个航班信息的类
+class flight
 {
 public:
 	string flight_number;        //航班号
@@ -34,38 +35,42 @@ public:
 	int book_number;        //已预定总数
 };
 
-class Airplane_System										  //定义一个飞机订票系统的类
+//定义一个飞机订票系统的类
+class Airplane_System
 {
 public:
-	int number_of_city;											//开放航线的城市个数		
-	int total;															//航班总数
-	string number1[300];										//过渡string数组，无重要作用，可忽略
 	void dataloading();										  //航班信息录入
 	void current_information_view();					  //航班信息浏览
 	void check_information();							      //航班信息查询
 	void ticket_booking();									  //预订机票
-	void ticket_returning();									  //退票
+	void ticket_returning(string flight_num);	//退票(航班号)
 	void flight_list();											  //相应航班排序
 	void flight_recommended();						      //航班线路设计
 	void output_route();									      //航班网络输出
 	void best_route_recommended();			      //最优航班线路推荐
 private:
+    //边链表
 	struct edge
 	{
 		int takeoff_point;                                      //起飞城市
 		edge* nextpoint;                                          //到达城市
 		flight* flight_node;                                     //航班信息节点
 	};
+    //定点数组
 	struct point
 	{
 		int takeoffpoint;                                         //起飞城市
 		string cityname;                                         //城市名称
 		edge* address;                                          //边链表的头指针
 	};
+    int number_of_city;                                            //开放航线的城市个数
+    int total;                                                            //航班总数
+    string number1[300];                                        //过渡string数组，无重要作用，可忽略
 	flight* flight_totalnumber;                         //动态flight类数组的数组名（指针）
 	bool time_compare(int, int);                         //时间比较（是否可以并入航线）,第一个参数是航班的落地时间，第二个参数是航班的起飞时间
 	bool place_compare(string, string);                //地点比较，比较两个地点是否为同一地点
 };
+
 
 //信息录入  从文件录入到程序    by管清泉
 void Airplane_System::dataloading()
@@ -119,4 +124,20 @@ void Airplane_System::flight_recommended()
 
 }
 
+//退票 by 陆子旭
+void ticket_returning(string flight_num){
+    for (int i = 0; i <total; i++) {
+        if (flight_totalnumber[i].flight_number == flight_num) {
+            if (flight_totalnumber[i].book_number > 0) {
+                flight_totalnumber[i].book_number --;
+            }
+            break;
+        }
+    }
+}
+
+//相应航班排序 by 陆子旭
+void flight_list(){
+    
+}
 #endif /* Airplane_System_hpp */
