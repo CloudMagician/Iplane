@@ -39,6 +39,8 @@ public:
 class Airplane_System
 {
 public:
+    Airplane_System();              //构造函数
+    ~Airplane_System();             //析构函数
 	void dataloading();										  //航班信息录入
 	void current_information_view();					  //航班信息浏览
 	void check_information();							      //航班信息查询
@@ -69,8 +71,37 @@ private:
 	flight* flight_totalnumber;                         //动态flight类数组的数组名（指针）
 	bool time_compare(int, int);                         //时间比较（是否可以并入航线）,第一个参数是航班的落地时间，第二个参数是航班的起飞时间
 	bool place_compare(string, string);                //地点比较，比较两个地点是否为同一地点
+    
+    void print_lzx(int);                    //陆子旭定义的相关输出函数
 };
 
+//构造函数
+Airplane_System::Airplane_System(){
+    
+}
+
+//析构函数
+Airplane_System::~Airplane_System(){
+    
+}
+
+//时间比较（是否可以并入航线）,第一个参数是航班的落地时间，第二个参数是航班的起飞时间
+bool Airplane_System::time_compare(int temp_first, int temp_last){
+    if (temp_first < temp_last) {
+        return true;
+    }else{
+        return false;
+    }
+};
+
+//地点比较，比较两个地点是否为同一地点
+bool Airplane_System::place_compare(string temp_first, string temp_last){
+    if (temp_first == temp_last) {
+        return true;
+    }else{
+        return false;
+    }
+}
 
 //信息录入  从文件录入到程序    by管清泉
 void Airplane_System::dataloading()
@@ -124,12 +155,25 @@ void Airplane_System::flight_recommended()
 
 }
 
+//陆子旭定义的相关输出函数 by 陆子旭
+void Airplane_System::print_lzx(int temp_a){
+    switch (temp_a) {
+        case 1:cout << "退票成功!" << endl;break;
+        case 2:cout << "退票失败!" << endl;break;
+        default:
+            break;
+    }
+}
+
 //退票 by 陆子旭
-void ticket_returning(string flight_num){
+void Airplane_System::ticket_returning(string flight_num){
     for (int i = 0; i <total; i++) {
         if (flight_totalnumber[i].flight_number == flight_num) {
             if (flight_totalnumber[i].book_number > 0) {
                 flight_totalnumber[i].book_number --;
+                print_lzx(1);
+            }else{
+                print_lzx(2);
             }
             break;
         }
@@ -137,7 +181,7 @@ void ticket_returning(string flight_num){
 }
 
 //相应航班排序 by 陆子旭
-void flight_list(){
+void Airplane_System::flight_list(){
     
 }
 #endif /* Airplane_System_hpp */
