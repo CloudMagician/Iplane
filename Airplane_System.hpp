@@ -54,7 +54,7 @@ private:
     //边链表
 	struct edge
 	{
-		int next_point;     //到达城市
+		int next_point;     //终点城市
 		edge* next;         //下一条边
 		int flight_node;    //航班节点信息(vector数组下标)
 	};
@@ -191,7 +191,7 @@ void Airplane_System::dataloading() {
         }else{
             temp_edge2 = point_link[result - point_link.begin()].address;
             while (temp_edge2->next) {
-                temppp = temp_edge2->next;
+                temp_edge2 = temp_edge2->next;
             }
             temp_edge2->next = temp_edge1;
         }
