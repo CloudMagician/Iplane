@@ -26,7 +26,7 @@ public:
 	string flight_number;        //航班号
 	string starting_point;   //起始城市
 	string finishing_point;   //到达城市
-	int strat_time;              //起飞时间
+	int start_time;              //起飞时间
 	int finish_time;            //到达时间
 	int price;                      //飞机票价
 	int discount;               //票价折扣
@@ -65,7 +65,7 @@ private:
 	};
     int number_of_city;                                            //开放航线的城市个数
     int total;                                                            //航班总数
-    string number1[300];                                        //过渡string数组，无重要作用，可忽略
+	string* number1;
 	flight* flight_totalnumber;                         //动态flight类数组的数组名（指针）
 	bool time_compare(int, int);                         //时间比较（是否可以并入航线）,第一个参数是航班的落地时间，第二个参数是航班的起飞时间
 	bool place_compare(string, string);                //地点比较，比较两个地点是否为同一地点
@@ -86,6 +86,7 @@ void Airplane_System::dataloading()
 	getline(file, number);
 	total = stoi(number);                                                       //取出一共有几个航班			
 	flight_totalnumber = new flight[total];
+	number1 = new string[total];
 	for (int i = 0; i <total; i++)
 	{
 		getline(file, number1[i]);
