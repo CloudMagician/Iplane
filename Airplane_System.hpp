@@ -40,6 +40,18 @@ public:
 class Airplane_System
 {
 public:
+<<<<<<< HEAD
+	void dataloading();										  //航班信息录入
+	void current_information_view();					  //航班信息浏览
+	void check_information();							      //航班信息查询
+	void ticket_booking();									  //预订机票
+	void ticket_returning(string flight_num);	//退票(航班号)
+	void flight_list();											  //相应航班排序
+	void flight_recommended();						      //航班线路设计
+	void output_route();									      //航班网络输出
+	void best_route_recommended();			      //最优航班线路推荐
+	int total_city_number();
+=======
     Airplane_System();                                  //构造函数
     ~Airplane_System();                                 //析构函数
 	void dataloading();							        //航班信息录入
@@ -51,6 +63,7 @@ public:
 	void flight_recommended();					        //航班线路设计
 	void output_route();						        //航班网络输出
 	void best_route_recommended();			            //最优航班线路推荐
+>>>>>>> cc2cd6dedbdb6d94fd277570fdf807755187bc47
 private:
     //边链表
 	struct edge
@@ -76,6 +89,23 @@ private:
     void print_lzx(int);                //陆子旭定义的相关输出函数
 };
 
+<<<<<<< HEAD
+int Airplane_System::total_city_number()
+{
+	vector <string> a;
+	if (a.size() == 0)
+	{
+		a.push_back(flight_totalnumber[0].starting_point);
+	//	a.push_back(flight_totalnumber[0].finishing_point);
+	}
+	for (int i = 1; i < total; i++)
+	{
+		vector<string>::iterator result = find(a.begin(), a.end(), flight_totalnumber[i].starting_point); //查找3
+		if (result != a.end()) 
+			a.push_back(flight_totalnumber[i].starting_point);
+	}
+	return a.size();
+=======
 //构造函数
 Airplane_System::Airplane_System(){
     
@@ -109,6 +139,7 @@ bool Airplane_System::place_compare(string temp_first, string temp_last){
     }else{
         return false;
     }
+>>>>>>> cc2cd6dedbdb6d94fd277570fdf807755187bc47
 }
 
 //信息录入  从文件录入到程序    by管清泉
