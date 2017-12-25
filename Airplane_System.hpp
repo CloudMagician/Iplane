@@ -24,6 +24,7 @@ using namespace std;
 class flight
 {
 public:
+<<<<<<< HEAD
 	string flight_number;   //航班号
 	string starting_point;  //起始城市
 	string finishing_point; //到达城市
@@ -33,6 +34,17 @@ public:
 	int discount;           //票价折扣
 	string company;         //所属公司
 	int seat_number;        //座位总数
+=======
+	string flight_number;        //航班号
+	string starting_point;   //起始城市
+	string finishing_point;   //到达城市
+	int start_time;              //起飞时间
+	int finish_time;            //到达时间
+	int price;                      //飞机票价
+	int discount;               //票价折扣
+	string company;           //所属公司
+	int seat_number;          //座位总数
+>>>>>>> 4c32a026c080a4fbe0677b1bf6685f89b5f951f7
 	int book_number;        //已预定总数
 };
 
@@ -66,6 +78,7 @@ private:
 		string cityname;    //城市名称
 		edge* address;      //边链表的头指针
 	};
+<<<<<<< HEAD
     int number_of_city;                 //开放航线的城市个数
     int total;                          //航班总数
     string number1[300];                //过渡string数组，无重要作用，可忽略
@@ -75,6 +88,14 @@ private:
     
     void print_flight_data(flight);     //输出航班信息
     void print_lzx(int);                //陆子旭定义的相关输出函数
+=======
+    int number_of_city;                                            //开放航线的城市个数
+    int total;                                                            //航班总数
+	string* number1;
+	flight* flight_totalnumber;                         //动态flight类数组的数组名（指针）
+	bool time_compare(int, int);                         //时间比较（是否可以并入航线）,第一个参数是航班的落地时间，第二个参数是航班的起飞时间
+	bool place_compare(string, string);                //地点比较，比较两个地点是否为同一地点
+>>>>>>> 4c32a026c080a4fbe0677b1bf6685f89b5f951f7
 };
 
 //构造函数
@@ -126,9 +147,13 @@ void Airplane_System::dataloading()
 	getline(file, number);
 	total = stoi(number);   //取出一共有几个航班
 	flight_totalnumber = new flight[total];
+<<<<<<< HEAD
     while (!file.eof()) {
         <#statements#>
     }
+=======
+	number1 = new string[total];
+>>>>>>> 4c32a026c080a4fbe0677b1bf6685f89b5f951f7
 	for (int i = 0; i <total; i++)
 	{
 		getline(file, number1[i]);
