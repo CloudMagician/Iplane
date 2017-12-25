@@ -195,6 +195,8 @@ void Airplane_System::dataloading() {
             }
             temp_edge2->next = temp_edge1;
         }
+        //城市数目
+        number_of_city = point_link.size();
     }
 	file.close();
 }
