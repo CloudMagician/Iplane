@@ -154,6 +154,28 @@ bool Airplane_System::time_compare(int temp_first, int temp_last){
     }
 };
 
+int Airplane_System::total_city_number()                                 //返回不同起飞城市的总数
+{
+	vector <string> a;
+	if (a.size() == 0)
+	{
+		a.push_back(flight_totalnumber[0].starting_point);
+	}
+	for (int i = 1; i < total; i++)
+	{
+		if (find(a.begin(), a.end(), flight_totalnumber[i].starting_point) == a.end())
+		{
+			a.push_back(flight_totalnumber[i].starting_point);
+		}
+		if (a.size() == 5)
+		{
+			cout << a.size();
+			break;
+		}
+	}
+	return a.size();
+}
+
 //地点比较，比较两个地点是否为同一地点
 bool Airplane_System::place_compare(string temp_first, string temp_last){
     if (temp_first == temp_last) {
