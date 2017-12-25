@@ -48,6 +48,7 @@ public:
 	void flight_recommended();						      //航班线路设计
 	void output_route();									      //航班网络输出
 	void best_route_recommended();			      //最优航班线路推荐
+	int total_city_number();
 private:
     //边链表
 	struct edge
@@ -71,6 +72,22 @@ private:
 	bool place_compare(string, string);                //地点比较，比较两个地点是否为同一地点
 };
 
+int Airplane_System::total_city_number()
+{
+	vector <string> a;
+	if (a.size() == 0)
+	{
+		a.push_back(flight_totalnumber[0].starting_point);
+	//	a.push_back(flight_totalnumber[0].finishing_point);
+	}
+	for (int i = 1; i < total; i++)
+	{
+		vector<string>::iterator result = find(a.begin(), a.end(), flight_totalnumber[i].starting_point); //查找3
+		if (result != a.end()) 
+			a.push_back(flight_totalnumber[i].starting_point);
+	}
+	return a.size();
+}
 
 //信息录入  从文件录入到程序    by管清泉
 void Airplane_System::dataloading()
