@@ -17,7 +17,6 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include "Qsort"
 using namespace std;
 
 //定义一个航班信息的类
@@ -40,18 +39,6 @@ public:
 class Airplane_System
 {
 public:
-<<<<<<< HEAD
-	void dataloading();										  //航班信息录入
-	void current_information_view();					  //航班信息浏览
-	void check_information();							      //航班信息查询
-	void ticket_booking();									  //预订机票
-	void ticket_returning(string flight_num);	//退票(航班号)
-	void flight_list();											  //相应航班排序
-	void flight_recommended();						      //航班线路设计
-	void output_route();									      //航班网络输出
-	void best_route_recommended();			      //最优航班线路推荐
-	int total_city_number();
-=======
     Airplane_System();                                  //构造函数
     ~Airplane_System();                                 //析构函数
 	void dataloading();							        //航班信息录入
@@ -63,49 +50,43 @@ public:
 	void flight_recommended();					        //航班线路设计
 	void output_route();						        //航班网络输出
 	void best_route_recommended();			            //最优航班线路推荐
->>>>>>> cc2cd6dedbdb6d94fd277570fdf807755187bc47
 private:
     //边链表
 	struct edge
 	{
-		int takeoff_point;      //起飞城市
-		edge* nextpoint;        //到达城市
-		flight* flight_node;    //航班信息节点
+		int next_point;     //到达城市
+		edge* next;         //下一条边
+		int flight_node;    //航班节点信息(vector数组下标)
 	};
-    //定点数组
+    //顶点数组
 	struct point
 	{
-		int takeoffpoint;   //起飞城市
 		string cityname;    //城市名称
 		edge* address;      //边链表的头指针
 	};
     int number_of_city;                 //开放航线的城市个数
     int total;                          //航班总数
-	vector flight_totalnumber;         //动态flight类数组的数组名（指针）
-	bool time_compare(int, int);        //时间比较（是否可以并入航线）,第一个参数是航班的落地时间，第二个参数是航班的起飞时间
-	bool place_compare(string, string); //地点比较，比较两个地点是否为同一地点
-    
+    flight flight_table;                //表头
+	vector <flight> flight_totalnumber; //flight数组(暂时不得进行排序，删除，添加元素等操作)
+    vector <point> point_link;          //邻接表顶点数组
+	bool int_compare(int, int);         //int比较，判断第一个int是否小于第二个int
+    bool string_compare(string, string);//string比较，比较两个string,是否相同
+    //用于vector的查找函数(自定义类的方式实现)
+    class findx {
+        private: string test;
+        public:
+        findx(const string str):test(str) {}
+        bool operator()(point& dValue) {
+            if(dValue.cityname == test) return true;
+            else return false;
+        }
+    };
     void print_flight_data(flight);     //输出航班信息
-    void print_lzx(int);                //陆子旭定义的相关输出函数
+    
+    void print_lzx(int);                //定义的相关输出函数 by 陆子旭
 };
 
-<<<<<<< HEAD
-int Airplane_System::total_city_number()
-{
-	vector <string> a;
-	if (a.size() == 0)
-	{
-		a.push_back(flight_totalnumber[0].starting_point);
-	//	a.push_back(flight_totalnumber[0].finishing_point);
-	}
-	for (int i = 1; i < total; i++)
-	{
-		vector<string>::iterator result = find(a.begin(), a.end(), flight_totalnumber[i].starting_point); //查找3
-		if (result != a.end()) 
-			a.push_back(flight_totalnumber[i].starting_point);
-	}
-	return a.size();
-=======
+
 //构造函数
 Airplane_System::Airplane_System(){
     
@@ -123,8 +104,8 @@ void print_flight_data(flight temp){
     << temp.company << '\t' << temp.seat_number << '\t' << temp.book_number << endl;
 }
 
-//时间比较（是否可以并入航线）,第一个参数是航班的落地时间，第二个参数是航班的起飞时间
-bool Airplane_System::time_compare(int temp_first, int temp_last){
+//int比较，判断第一个int是否小于第二个int
+bool Airplane_System::int_compare(int temp_first, int temp_last){
     if (temp_first < temp_last) {
         return true;
     }else{
@@ -132,53 +113,89 @@ bool Airplane_System::time_compare(int temp_first, int temp_last){
     }
 };
 
-//地点比较，比较两个地点是否为同一地点
-bool Airplane_System::place_compare(string temp_first, string temp_last){
+//string比较，比较两个string,是否相同
+bool Airplane_System::string_compare(string temp_first, string temp_last){
     if (temp_first == temp_last) {
         return true;
     }else{
         return false;
     }
->>>>>>> cc2cd6dedbdb6d94fd277570fdf807755187bc47
 }
 
-//信息录入  从文件录入到程序    by管清泉
-void Airplane_System::dataloading()
-{
-	ifstream file;
+//信息录入  从文件录入到程序
+//输出vector数组，邻接表 by 管清泉
+void Airplane_System::dataloading() {
+	ifstream file;                  //读入文件
+    flight temp_flight;             //临时航班类
+    point temp_point;               //临时顶点节结点
+    edge *temp_edge1,*temp_edge2;   //临时边结点
+    vector<point>::iterator result; //vector迭代器
 	file.open("C:/Users/97263/Desktop/Airplace_System/file.txt");
 	if (file.is_open() == false)
 	{
 		cerr << "error";
 		exit(1);
 	}
-	string number;
-	getline(file, number);
-	total = stoi(number);   //取出一共有几个航班
-	flight_totalnumber = new flight[total];
-<<<<<<< HEAD
-    while (!file.eof()) {
-        <#statements#>
+    //读表头
+    if (!file.eof()) {
+        file >> flight_table.starting_point;
+        file >> flight_table.finishing_point;
+        file >> flight_table.company;
+        file >> flight_table.flight_number;
+        file >> flight_table.strat_time;
+        file >> flight_table.finish_time;
+        file >> flight_table.price;
+        file >> flight_table.discount;
+        file >> flight_table.seat_number;
+        file >> flight_table.book_number;
+        flight_totalnumber.push_back(temp_flight);
     }
-=======
-	number1 = new string[total];
->>>>>>> 4c32a026c080a4fbe0677b1bf6685f89b5f951f7
-	for (int i = 0; i <total; i++)
-	{
-		getline(file, number1[i]);
-		istringstream istr;
-		istr.str(number1[i]);
-		istr >> flight_totalnumber[i].starting_point;
-		istr >> flight_totalnumber[i].finishing_point;
-		istr >> flight_totalnumber[i].company;
-		istr >> flight_totalnumber[i].flight_number;
-		istr >> flight_totalnumber[i].strat_time;
-		istr >> flight_totalnumber[i].finish_time;
-		istr >> flight_totalnumber[i].price;
-		istr >> flight_totalnumber[i].discount;
-		istr >> flight_totalnumber[i].seat_number;
-		istr >> flight_totalnumber[i].book_number;
-	}
+    while (!file.eof()) {
+        //统计航线数目
+        total++;
+        //读数据
+        file >> temp_flight.starting_point;
+        file >> temp_flight.finishing_point;
+        file >> temp_flight.company;
+        file >> temp_flight.flight_number;
+        file >> temp_flight.strat_time;
+        file >> temp_flight.finish_time;
+        file >> temp_flight.price;
+        file >> temp_flight.discount;
+        file >> temp_flight.seat_number;
+        file >> temp_flight.book_number;
+        flight_totalnumber.push_back(temp_flight);
+        //生成邻接表
+        //判断终点城市结点
+        result = find_if(point_link.begin(),point_link.end(),findx(temp_flight.finishing_point));
+        if (result == point_link.end()) {
+            temp_point.cityname = temp_flight.finishing_point;
+            temp_point.address = NULL;
+            point_link.push_back(temp_point);
+        }
+        //生成边结点
+        temp_edge1 = new edge;
+        temp_edge1->next_point = result - point_link.begin();
+        temp_edge1->flight_node = total - 1;
+        temp_edge1->next = NULL;
+        //判断起点城市结点
+        result = find_if(point_link.begin(),point_link.end(),findx(temp_flight.starting_point));
+        if (result == point_link.end()) {
+            temp_point.cityname = temp_flight.starting_point;
+            temp_point.address = NULL;
+            point_link.push_back(temp_point);
+        }
+        //将边加入邻接表
+        if (!point_link[result - point_link.begin()].address) {
+            point_link[result - point_link.begin()].address = temp_edge1;
+        }else{
+            temp_edge2 = point_link[result - point_link.begin()].address;
+            while (temp_edge2->next) {
+                temppp = temp_edge2->next;
+            }
+            temp_edge2->next = temp_edge1;
+        }
+    }
 	file.close();
 }
 
