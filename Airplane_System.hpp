@@ -86,6 +86,40 @@ private:
     void print_lzx(int);                //定义的相关输出函数 by 陆子旭
 };
 
+void Airplane_System::flight_recommended()
+{
+	string city_takeoff;
+	string city_arrive;
+	int time_takeoff;
+	int time_arrive;
+	int index;
+	edge* edge_guodu;
+	bool flag = false;
+	vector<point>::iterator result;
+	cout << "请输入您的出发城市"<<endl;
+	cin >> city_takeoff;
+	cout << "请输入您的目的城市" << endl;
+	cin >> city_arrive;
+	cout << "请输入您可以接受出发的时间" << endl;
+	cin >> time_takeoff;
+	cout << "请输入您可以接受到达的时间" << endl;
+	cin >> time_arrive;
+	result = find(point_link.begin(), point_link.end(), city_takeoff);
+	index = result - point_link.begin();
+	edge_guodu = point_link[index].address;
+	while (edge_guodu)
+	{
+		if (point_link[edge_guodu->next_point].cityname == city_arrive)
+		{
+			flag = true;
+		}
+		edge_guodu = edge_guodu->next;
+	}
+	if (!flag)
+	{
+		
+	}
+}
 
 //构造函数
 Airplane_System::Airplane_System(){
