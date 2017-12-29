@@ -92,7 +92,7 @@ private:
         }
     };
     void print_flight_data(flight);     //输出航班信息
-    
+
     void print_lzx(int);                //定义的相关输出函数 by 陆子旭
 };
 
@@ -127,18 +127,18 @@ void Airplane_System::flight_recommended()
     }
     if (!flag)
     {
-        
+
     }
 }
 
 //构造函数
 Airplane_System::Airplane_System(){
-    
+
 }
 
 //析构函数
 Airplane_System::~Airplane_System(){
-    
+
 }
 
 //输出航班信息
@@ -259,7 +259,7 @@ void Airplane_System::flight_recommended()
     cin >> where_to_start;
     cout << "请输入目的地" << endl;
     cin >> where_to_go;
-    
+
 }
 
 //陆子旭定义的相关输出函数 by 陆子旭
@@ -334,7 +334,7 @@ void Airplane_System::flight_list
         default:
             break;
     }
-    
+
 }
 
 //最优航班线路推荐 by 陆子旭
@@ -396,44 +396,57 @@ void Airplane_Syetem::check_information(){
 
 //订票系统 by 杨溢
 void Airplane_System::ticktet_booking(){
-    int have_site[20],hs=0;//存放符合要求信息的下标（可以动态申请吗？） ,hs用来指向次数组的位置
     int if_site=0; //是否有符合条件的
-    int ordinal;
-    string date,start,finish;
+    vector<int>the_other_choice;
+    int ordinal,ticket_position;
+    string date,flight_num;
     string date1, date2;//表示日期
-    cout << "请输入航班日期，起始城市，终止城市：";
-    cin >> date >> start >> finish;
+    cout << "请输入航班日期，航班号：";
+    cin >> date >> flight_num;
     date1 = "2017" + date + "0000";//用来表示一整天
     date2 = "2017" + date + "2359";
-    for (int i = 0; i < total; i++){//用位置信息和起始城市进行匹配
-        if(date1<flight_totalnumber[i].start_time&&date2>flight_totalnumber[i].start_time&&flight_totalnumber[i].starting_point==start&&flight_totalnumber[i].finishing_point==finish){
+    for (ticket_position=0;ticket_position<total&&if_site==0;ticket_position++){//用位置信息和起始城市进行匹配
+        if(date1<flight_totalnumber[i].start_time&&date2>flight_totalnumber[i].start_time&&flight_totalnumber[i].flight_number==flight_num){
             if(flight_totalnumber[i].seat_number>flight_totalnumber[i].book_number){//有空位
-                have_site[hs]=i;
-                hs++;
                 if_site=1;
             }
         }
-        
+
     }
-    if(if_site==1){//有符合条件的航班
-        cout<<"符合条件的航班信息为：\n"<<endl;
-        for(int i=0;i<hs;i++){
+    if(ticket_positon==total&&if_site==0){//信息查找失败
+        cout<<"信息输入有误，没有找到符合条件的信息\n";
+        return;
+    }
+    if(if_site==0&&ticket_position<total){//无票
+        cout<<"该航班已无票\n";
+        string st_po,fi_po;
+        st_po=flight_totalnumber[ticket_position].starting_point;
+        fi_po=flight_totalnumber[ticket_position].finishing_point;
+        for(int i=0;i<total;i++){
+            if(i==ticket_position)
+            continue;
+            if(date1<flight_totalnumber[i].start_time&&date2>flight_totalnumber[i].start_time&&flight_totalnumber[i].starting_point==st_po&&flight_totalnumber[i].finishing_point==fi_po){
+                the_other_choice.push_back(i);
+                }
+        }
+        cout<<"系统推荐的其他符合条件的航班信息为：\n"<<endl;
+        for(int i=0;i<the_other_choice.size;i++){
             cout<<i<<". "<<endl;
-            cout<<"航班号："<<flight_totalnumber[have_site[i]].flight_number<<" "<<endl;
-            cout<<"起降时间:"<<flight_totalnumber[have_site[i]].start_time<< "-" << flight_totalnumber[have_site[i]].finish_time <<endl;
-            cout<<"航行地点:"<<flight_totalnumber[have_site[i]].starting_point << "-" << flight_totalnumber[have_site[i]].finishing_point << endl;
-            cout<<"飞机票价："<<flight_totalnumber[have_site[i]].price << endl;
-            cout<<"票价折扣："<<flight_totalnumber[have_site[i]].discount << endl;
-            cout<<"所属公司："<<flight_totalnumber[have_site[i]].company << endl;
-            cout<<"剩余票数："<<flight_totalnumber[have_site[i]].seat_number - flight_totalnumber[have_site[i]].book_number<<endl;
+            cout<<"航班号："<<flight_totalnumber[the_other_choice[i]].flight_number<<" "<<endl;
+            cout<<"起降时间:"<<flight_totalnumber[the_other_choice[i]].start_time<< "-" << flight_totalnumber[the_other_choice[i]].finish_time <<endl;
+            cout<<"航行地点:"<<flight_totalnumber[the_other_choice[i]].starting_point << "-" << flight_totalnumber[the_other_choice[i]].finishing_point << endl;
+            cout<<"飞机票价："<<flight_totalnumber[the_other_choice[i]].price << endl;
+            cout<<"票价折扣："<<flight_totalnumber[the_other_choice[i]].discount << endl;
+            cout<<"所属公司："<<flight_totalnumber[the_other_choice[i]].company << endl;
+            cout<<"剩余票数："<<flight_totalnumber[the_other_choice[i]].seat_number - flight_totalnumber[the_other_choice[i]].book_number<<endl;
             cout<<"\n";
         }
         cout<<"输入想要选择的序号";
         cin>>ordinal;
-        flight_totalnumber[have_site[ordinal]].book_number++;
+        flight_totalnumber[the_other_choice[ordinal]].book_number++;
     }
-    if(if_site==0){//没有符合条件的航班
-        
+    if(if_site==1){//有符合条件的航班
+        cout<<"订票成功";
     }
 }
 
