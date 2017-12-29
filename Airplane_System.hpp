@@ -88,6 +88,7 @@ private:
 
 void Airplane_System::flight_recommended()
 {
+	vector<point> vvpoint;
 	string city_takeoff;
 	string city_arrive;
 	int time_takeoff;
@@ -104,21 +105,51 @@ void Airplane_System::flight_recommended()
 	cin >> time_takeoff;
 	cout << "请输入您可以接受到达的时间" << endl;
 	cin >> time_arrive;
-	result = find(point_link.begin(), point_link.end(), city_takeoff);
-	index = result - point_link.begin();
-	edge_guodu = point_link[index].address;
-	while (edge_guodu)
+	ifstream file;
+	file.open("C:/Users/97263/Desktop/Airplace_System/file.txt");
+	if (file.is_open() == false)
 	{
-		if (point_link[edge_guodu->next_point].cityname == city_arrive)
+		cerr << "error";
+		exit(1);
+	}
+	string number1[total];
+	flight flight_guodu[total];
+	point point_guodu;
+	vector<point>::iterator result;
+	for (int i = 0; i <total; i++)
+	{
+		getline(file, number1[i]);
+		istringstream istr;
+		istr.str(number1[i]);
+		istr >> flight_guodu[i].starting_point;
+		istr >> flight_guodu[i].finishing_point;
+		istr >> flight_guodu[i].company;
+		istr >> flight_guodu[i].flight_number;
+		istr >> flight_guodu[i].strat_time;
+		istr >> flight_guodu[i].finish_time;
+		istr >> flight_guodu[i].price;
+		istr >> flight_guodu[i].discount;
+		istr >> flight_guodu[i].seat_number;
+		istr >> flight_guodu[i].book_number;
+		if (i==0)
 		{
-			flag = true;
+			point_guodu.cityname = flight_guodu[i].starting_point;
+			point_guodu.address = NULL;
+			vvpoint.push_back(point_guodu);
 		}
-		edge_guodu = edge_guodu->next;
+		else
+		{
+			result = find(vvpoint.begin(), vvpoint.end(), flight_guodu[i].starting_point);
+				if (result==vvpoint.end())
+				{
+					point_guodu.cityname = flight_guodu[i].starting_point;
+					point_guodu.address = NULL;
+					vvpoint.push_back(point_guodu);
+				}
+		}
 	}
-	if (!flag)
-	{
-		
-	}
+	cout << vvpoint.size();
+	file.close();
 }
 
 //构造函数
