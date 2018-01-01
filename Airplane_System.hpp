@@ -352,7 +352,10 @@ void Airplane_System::best_route_recommended(int sort_bool=1,long long timef_boo
     queue<int> temp_q;              //临时队列
     queue<int> Q,Q_f;               //广度搜索队列
     edge *p;                        //临时边
-    int j(0),k(0);                  //临时城市点
+    int j(0),k(0),visit[total];     //临时城市点
+    for (int i = 0; i<total; i++) {
+        visit[i] = 0;
+    }
     //直达航线统计
     result = find_if(point_link.begin(), point_link.end(), findx(start_bool));
     p = result->address;
@@ -368,6 +371,7 @@ void Airplane_System::best_route_recommended(int sort_bool=1,long long timef_boo
             temp_q = queue<int>();
             Q.push(p->next_point);
             Q_f.push(p->flight_node);
+            visit[p->flight_node] = 1;
         }
         p = p->next;
     }
@@ -380,12 +384,12 @@ void Airplane_System::best_route_recommended(int sort_bool=1,long long timef_boo
         p = point_link[j].address;
         while (p){
             if (flight_totalnumber[p->flight_node].start_time > flight_totalnumber[k].finish_time&&
-                flight_totalnumber[p->flight_node].finish_time < timel_bool){
+                flight_totalnumber[p->flight_node].finish_time < timel_bool&&
+                visit[p->flight_node] == 0){
                 for (int i = 0; i<int(temp_f.end() - temp_f.begin()); i++) {
                     if (flight_totalnumber[temp_f[i].back()].finishing_point == point_link[j].cityname&&
                         flight_totalnumber[temp_f[i].back()].finish_time <
-                        flight_totalnumber[p->flight_node].start_time&&
-                        temp_f[i].size()<3) {
+                        flight_totalnumber[p->flight_node].start_time) {
                         temp_q = temp_f[i];
                         temp_q.push(p->flight_node);
                         if (flight_totalnumber[p->flight_node].finishing_point==arrive_bool){
@@ -398,6 +402,7 @@ void Airplane_System::best_route_recommended(int sort_bool=1,long long timef_boo
                 }
                 Q.push(p->next_point);
                 Q_f.push(p->flight_node);
+                visit[p->flight_node] = 1;
             }
             p = p->next;
         }
