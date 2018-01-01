@@ -49,24 +49,12 @@ public:
     void ticket_booking();                                      //预订机票
     void ticket_returning(string);                              //退票(航班号)
     void flight_list(int,long long,long long,string,string);    //相应航班排序
-    void flight_recommended();                                  //航班线路设计
+    void flight_recommended(long long,long long,string,string); //航班线路设计
     void output_route();                                        //航班网络输出
     void best_route_recommended
     (int,long long,long long,string,string);    //最优航班线路推荐
 private:
-    //边链表
-    struct edge
-    {
-        int next_point;     //终点城市
-        int flight_node;    //航班节点信息(vector数组下标)
-        edge* next;         //下一条边
-    };
-    //顶点数组
-    struct point
-    {
-        string cityname;    //城市名称
-        edge* address;      //边链表的头指针
-    };
+    //航班数组相关
     //表头
     struct {
         string flight_number;   //航班号
@@ -83,11 +71,32 @@ private:
     int number_of_city;                 //开放航线的城市个数
     int total;                          //航班总数
     vector <flight> flight_totalnumber; //flight数组(暂时不得进行排序，删除，添加元素等操作)
+    
+    //邻接表相关
+    //边链表
+    struct edge
+    {
+        int next_point;     //终点城市
+        int flight_node;    //航班节点信息(vector数组下标)
+        edge* next;         //下一条边
+    };
+    //顶点数组
+    struct point
+    {
+        string cityname;    //城市名称
+        edge* address;      //边链表的头指针
+    };
     vector <point> point_link;          //邻接表顶点数组
+    
+    //公用相关函数
     bool int_compare(int, int);         //int比较，判断第一个int是否小于第二个int
     bool string_compare(string, string);//string比较，比较两个string,是否相同
     void print_flight_data(flight);     //输出航班信息
     
+    //航班数组（用于第七题和第九题）
+    vector<queue<int>> flight_queue(long long,long long,string,string);
+    
+    //用于vector的相关函数
     //用于vector<flight>的起始时间排序函数
     static bool vector_start_time_compare(const flight &a, const flight &b){
         return a.start_time < b.start_time;
@@ -107,58 +116,18 @@ private:
         }
     };
     
-    void print_lzx(int);                //定义的相关输出函数 by 陆子旭
+    //定义的相关输出函数 by 陆子旭
+    void print_lzx(int);
 };
 
 
-void Airplane_System::flight_recommended()
-{
-    string city_takeoff;
-    string city_arrive;
-    int time_takeoff;
-    int time_arrive;
-    int index;
-    edge* edge_guodu;
-    bool flag = false;
-    vector<point>::iterator result;
-    cout << "请输入您的出发城市"<<endl;
-    cin >> city_takeoff;
-    cout << "请输入您的目的城市" << endl;
-    cin >> city_arrive;
-    cout << "请输入您可以接受出发的时间" << endl;
-    cin >> time_takeoff;
-    cout << "请输入您可以接受到达的时间" << endl;
-    cin >> time_arrive;
-    result = find(point_link.begin(), point_link.end(), city_takeoff);
-    index = int(result - point_link.begin());
-    edge_guodu = point_link[index].address;
-    while (edge_guodu)
-    {
-        if (point_link[edge_guodu->next_point].cityname == city_arrive)
-        {
-            flag = true;
-        }
-        edge_guodu = edge_guodu->next;
-    }
-    if (!flag)
-    {
-
-    }
-}
 
 //构造函数
 Airplane_System::Airplane_System(){
-
 }
 
 //析构函数
 Airplane_System::~Airplane_System(){
-
-}
-
-//输出航班信息
-void print_flight_data(flight temp){
-    cout << temp.flight_number << '\t' << temp.starting_point << '\t' << temp.finishing_point <<'\t'<< temp.start_time << '\t' << temp.finish_time << '\t' << temp.price << '\t'<<temp.discount<< '\t'<< temp.company << '\t' << temp.seat_number << '\t' << temp.book_number << endl;
 }
 
 //int比较，判断第一个int是否小于第二个int
@@ -177,6 +146,85 @@ bool Airplane_System::string_compare(string temp_first, string temp_last){
     }else{
         return false;
     }
+}
+
+//输出航班信息
+void Airplane_System::print_flight_data(flight temp){
+    cout << temp.flight_number << '\t' << temp.starting_point << '\t' << temp.finishing_point <<'\t'<< temp.start_time << '\t' << temp.finish_time << '\t' << temp.price << '\t'<<temp.discount<< '\t'<< temp.company << '\t' << temp.seat_number << '\t' << temp.book_number << endl;
+}
+
+//航班数组（用于第七题和第九题 by 陆子旭
+//采用广度优先搜索
+//参数分别为：
+//对于起飞时间起始时间限制（timef_bool）；
+//对于起飞时间结束时间限制（timel_bool）；
+//起始城市（start_bool）；
+//到达城市（arrive_bool）；
+vector<queue<int>> Airplane_System::flight_queue(long long timef_bool=201710310000,
+                                                 long long timel_bool=201712310000,string start_bool="长春",string arrive_bool="长春"){
+    vector<point>::iterator result; //vector迭代器
+    vector<queue<int>> temp_f;      //航线数组
+    vector<queue<int>> temp_l;      //航线最终数组
+    queue<int> temp_q;              //临时队列
+    queue<int> Q,Q_f;               //广度搜索队列
+    edge *p;                        //临时边
+    int j(0),k(0);                  //临时城市点
+    bool visit[total];              //航班访问数组
+    for (int i = 0; i<total; i++) {
+        visit[i] = false;
+    }
+    //直达航线统计
+    result = find_if(point_link.begin(), point_link.end(), findx(start_bool));
+    p = result->address;
+    while (p){
+        if (flight_totalnumber[p->flight_node].start_time>timef_bool&&
+            flight_totalnumber[p->flight_node].finish_time<timel_bool){
+            temp_q.push(p->flight_node);
+            if (flight_totalnumber[p->flight_node].finishing_point==arrive_bool) {
+                temp_l.push_back(temp_q);
+            }else{
+                temp_f.push_back(temp_q);
+            }
+            temp_q = queue<int>();
+            Q.push(p->next_point);
+            Q_f.push(p->flight_node);
+            visit[p->flight_node] = true;
+        }
+        p = p->next;
+    }
+    //非直达航线统计
+    while (!Q.empty()){
+        j=Q.front();
+        Q.pop();
+        k=Q_f.front();
+        Q_f.pop();
+        p = point_link[j].address;
+        while (p){
+            if (flight_totalnumber[p->flight_node].start_time > flight_totalnumber[k].finish_time&&
+                flight_totalnumber[p->flight_node].finish_time < timel_bool&&
+                !visit[p->flight_node]){
+                for (int i = 0; i<int(temp_f.end() - temp_f.begin()); i++) {
+                    if (flight_totalnumber[temp_f[i].back()].finishing_point == point_link[j].cityname&&
+                        flight_totalnumber[temp_f[i].back()].finish_time <
+                        flight_totalnumber[p->flight_node].start_time) {
+                        temp_q = temp_f[i];
+                        temp_q.push(p->flight_node);
+                        if (flight_totalnumber[p->flight_node].finishing_point==arrive_bool){
+                            temp_l.push_back(temp_q);
+                        }else{
+                            temp_f.push_back(temp_q);
+                        }
+                        temp_q = queue<int>();
+                    }
+                }
+                Q.push(p->next_point);
+                Q_f.push(p->flight_node);
+                visit[p->flight_node] = true;
+            }
+            p = p->next;
+        }
+    }
+    return temp_l;
 }
 
 //信息录入  从文件录入到程序
@@ -258,6 +306,7 @@ void Airplane_System::print_lzx(int temp_a){
     switch (temp_a) {
         case -1:cout << "成功!" << endl;break;
         case -2:cout << "失败!" << endl;break;
+        case -3:cout << endl;break;
         default:cout << temp_a << endl;break;
     }
 }
@@ -279,7 +328,6 @@ void Airplane_System::ticket_returning(string flight_num){
 }
 
 //相应航班排序 by 陆子旭
-//参数分别为：
 //升降序（sort_bool）： 1为时间从低到高，2为时间从高到低，3为价格从低到高，4为价格从高到低；
 //对于起飞时间起始时间限制（timef_bool）；
 //对于起飞时间结束时间限制（timel_bool）；
@@ -336,6 +384,33 @@ void Airplane_System::flight_list(int sort_bool=1,long long timef_bool=201710310
     }
 }
 
+//航班线路设计 by 陆子旭
+//参数分别为：
+//对于起飞时间起始时间限制（timef_bool）；
+//对于起飞时间结束时间限制（timel_bool）；
+//起始城市（start_bool）；
+//到达城市（arrive_bool）；
+void Airplane_System::flight_recommended(long long timef_bool=201710310000,
+                                         long long timel_bool=201712310000,string start_bool="长春",string arrive_bool="长春"){
+    queue<int> temp_q;              //临时队列
+    vector<queue<int>> temp_l;      //航线最终数组
+    //调用函数
+    temp_l = flight_queue(timef_bool,timel_bool,start_bool,arrive_bool);
+    //输出
+    if (temp_l.size()==0) {
+        print_lzx(-2);
+        return;
+    }
+    for (vector<queue<int>>::iterator i = temp_l.begin(); i!=temp_l.end(); i++) {
+        temp_q = *i;
+        while (!temp_q.empty()) {
+            print_flight_data(flight_totalnumber[temp_q.front()]);
+            temp_q.pop();
+        }
+        print_lzx(-3);
+    }
+}
+
 //最优航班线路推荐 by 陆子旭
 //采用广度优先搜索
 //参数分别为：
@@ -346,74 +421,10 @@ void Airplane_System::flight_list(int sort_bool=1,long long timef_bool=201710310
 //到达城市（arrive_bool）；
 void Airplane_System::best_route_recommended(int sort_bool=1,long long timef_bool=201710310000,
                                              long long timel_bool=201712310000,string start_bool="长春",string arrive_bool="长春"){
-    vector<point>::iterator result; //vector迭代器
-    vector<queue<int>> temp_f;      //航线数组
     vector<queue<int>> temp_l;      //航线最终数组
     queue<int> temp_q;              //临时队列
-    queue<int> Q,Q_f;               //广度搜索队列
-    edge *p;                        //临时边
-    int j(0),k(0);                  //临时城市点
-    bool visit[total];              //航班访问数组
-    for (int i = 0; i<total; i++) {
-        visit[i] = false;
-    }
-    //直达航线统计
-    result = find_if(point_link.begin(), point_link.end(), findx(start_bool));
-    p = result->address;
-    while (p){
-        if (flight_totalnumber[p->flight_node].start_time>timef_bool&&
-            flight_totalnumber[p->flight_node].finish_time<timel_bool){
-            temp_q.push(p->flight_node);
-            if (flight_totalnumber[p->flight_node].finishing_point==arrive_bool) {
-                temp_l.push_back(temp_q);
-            }else{
-                temp_f.push_back(temp_q);
-            }
-            temp_q = queue<int>();
-            Q.push(p->next_point);
-            Q_f.push(p->flight_node);
-            visit[p->flight_node] = true;
-        }
-        p = p->next;
-    }
-    //非直达航线统计
-    while (!Q.empty()){
-        j=Q.front();
-        Q.pop();
-        k=Q_f.front();
-        Q_f.pop();
-        p = point_link[j].address;
-        while (p){
-            if (flight_totalnumber[p->flight_node].start_time > flight_totalnumber[k].finish_time&&
-                flight_totalnumber[p->flight_node].finish_time < timel_bool && !visit[p->flight_node]){
-                for (int i = 0; i<int(temp_f.end() - temp_f.begin()); i++) {
-                    if (flight_totalnumber[temp_f[i].back()].finishing_point == point_link[j].cityname&&
-                        flight_totalnumber[temp_f[i].back()].finish_time <
-                        flight_totalnumber[p->flight_node].start_time) {
-                        temp_q = temp_f[i];
-                        temp_q.push(p->flight_node);
-                        if (flight_totalnumber[p->flight_node].finishing_point==arrive_bool){
-                            temp_l.push_back(temp_q);
-                        }else{
-                            temp_f.push_back(temp_q);
-                        }
-                        temp_q = queue<int>();
-                    }
-                }
-                Q.push(p->next_point);
-                Q_f.push(p->flight_node);
-                visit[p->flight_node] = true;
-            }
-            p = p->next;
-        }
-    }
-    //移除未达目标城市的队列
-    for (vector<queue<int>>::iterator i = temp_f.begin(); i!=temp_f.end(); i++) {
-        if (i->back()!=-1) {
-            i = temp_f.erase(i);
-            i--;
-        }
-    }
+    //调用函数
+    temp_l = flight_queue(timef_bool,timel_bool,start_bool,arrive_bool);
     //取最优
     if (temp_l.size()==0) {
         print_lzx(-2);
@@ -474,23 +485,6 @@ void Airplane_System::best_route_recommended(int sort_bool=1,long long timef_boo
     }
 }
 
-//航班信息查询 by 杨溢
-void Airplane_Syetem::check_information(){
-    string flightnum;
-    cout << "请输入想要查询的航班号：\n" << endl;
-    cin >> flightnum;
-    for (int i = 0; i < total; i++){
-        if (flight_totalnumber[i].flight_number == flight){
-            cout << "起降时间：" << flight_totalnumber[i].start_time << "-" << flight_totalnumber[i].finish_time << endl;
-            cout << "航行地点：" << flight_totalnumber[i].starting_point << "-" << flight_totalnumber[i].finishing_point << endl;
-            cout << "飞机票价：" << flight_totalnumber[i].price << endl;
-            cout << "票价折扣：" << flight_totalnumber[i].discount << endl;
-            cout << "所属公司：" << flight_totalnumber[i].company << endl;
-            cout << "剩余票数：" << flight_totalnumber[i].seat_number - flight_totalnumber[i].book_number << endl;
-            return;
-        }
-    }
-}
 
 //订票系统 by 杨溢
 void Airplane_System::ticktet_booking(){
