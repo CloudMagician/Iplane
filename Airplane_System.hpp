@@ -120,110 +120,6 @@ private:
     void print_lzx(int);
 };
 
-
-<<<<<<< HEAD
-=======
-void Airplane_System::flight_recommended()
-{
-<<<<<<< HEAD
-	vector<point> vvpoint;
-	string city_takeoff;
-	string city_arrive;
-	int time_takeoff;
-	int time_arrive;
-	int index;
-	edge* edge_guodu;
-	bool flag = false;
-	vector<point>::iterator result;
-	cout << "请输入您的出发城市"<<endl;
-	cin >> city_takeoff;
-	cout << "请输入您的目的城市" << endl;
-	cin >> city_arrive;
-	cout << "请输入您可以接受出发的时间" << endl;
-	cin >> time_takeoff;
-	cout << "请输入您可以接受到达的时间" << endl;
-	cin >> time_arrive;
-	ifstream file;
-	file.open("C:/Users/97263/Desktop/Airplace_System/file.txt");
-	if (file.is_open() == false)
-	{
-		cerr << "error";
-		exit(1);
-	}
-	string number1[total];
-	flight flight_guodu[total];
-	point point_guodu;
-	vector<point>::iterator result;
-	for (int i = 0; i <total; i++)
-	{
-		getline(file, number1[i]);
-		istringstream istr;
-		istr.str(number1[i]);
-		istr >> flight_guodu[i].starting_point;
-		istr >> flight_guodu[i].finishing_point;
-		istr >> flight_guodu[i].company;
-		istr >> flight_guodu[i].flight_number;
-		istr >> flight_guodu[i].strat_time;
-		istr >> flight_guodu[i].finish_time;
-		istr >> flight_guodu[i].price;
-		istr >> flight_guodu[i].discount;
-		istr >> flight_guodu[i].seat_number;
-		istr >> flight_guodu[i].book_number;
-		if (i==0)
-		{
-			point_guodu.cityname = flight_guodu[i].starting_point;
-			point_guodu.address = NULL;
-			vvpoint.push_back(point_guodu);
-		}
-		else
-		{
-			result = find(vvpoint.begin(), vvpoint.end(), flight_guodu[i].starting_point);
-				if (result==vvpoint.end())
-				{
-					point_guodu.cityname = flight_guodu[i].starting_point;
-					point_guodu.address = NULL;
-					vvpoint.push_back(point_guodu);
-				}
-		}
-	}
-	cout << vvpoint.size();
-	file.close();
-=======
-    string city_takeoff;
-    string city_arrive;
-    int time_takeoff;
-    int time_arrive;
-    int index;
-    edge* edge_guodu;
-    bool flag = false;
-    vector<point>::iterator result;
-    cout << "请输入您的出发城市"<<endl;
-    cin >> city_takeoff;
-    cout << "请输入您的目的城市" << endl;
-    cin >> city_arrive;
-    cout << "请输入您可以接受出发的时间" << endl;
-    cin >> time_takeoff;
-    cout << "请输入您可以接受到达的时间" << endl;
-    cin >> time_arrive;
-    result = find(point_link.begin(), point_link.end(), city_takeoff);
-    index = int(result - point_link.begin());
-    edge_guodu = point_link[index].address;
-    while (edge_guodu)
-    {
-        if (point_link[edge_guodu->next_point].cityname == city_arrive)
-        {
-            flag = true;
-        }
-        edge_guodu = edge_guodu->next;
-    }
-    if (!flag)
-    {
-
-    }
->>>>>>> 27340af60d88b08021f4c953c3598be5a81c50fd
-}
->>>>>>> 22c27eb915c6402360399743ee31403a2ea7f2e8
-
 //构造函数
 Airplane_System::Airplane_System(){
 }
@@ -514,7 +410,6 @@ void Airplane_System::flight_recommended(long long timef_bool=201710310000,
 }
 
 //最优航班线路推荐 by 陆子旭
-//采用广度优先搜索
 //参数分别为：
 //升降序（sort_bool）： 1取最短时间，2取最低价格；
 //对于起飞时间起始时间限制（timef_bool）；
