@@ -9,6 +9,7 @@
 #ifndef Airplane_System_hpp
 #define Airplane_System_hpp
 
+#include "stdafx.h"
 #include <string>
 #include <stdio.h>
 #include <fstream>
