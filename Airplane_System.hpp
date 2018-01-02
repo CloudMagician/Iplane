@@ -44,14 +44,14 @@ public:
     //基本函数
     Airplane_System();                                          //构造函数
     ~Airplane_System();                                         //析构函数
-    
+
     //用户方面
     void Register(string,string,bool);                          //注册
     void SignIn(string,string);                                 //登录
     void Booking(int);                                          //订票
     void Show();                                                //展示
     void Refund(int);                                           //退票
-    
+
     //题目要求
     void dataloading(string);                                   //航班信息录入
     void current_information_view();                            //航班信息浏览
@@ -97,10 +97,7 @@ private:
         edge* address;      //边链表的头指针
     };
     vector <point> point_link;          //邻接表顶点数组
-<<<<<<< HEAD
 
-=======
-    
     //用户相关
     //一个用户
     struct User{
@@ -108,14 +105,15 @@ private:
         string password;
         bool IsAdministrator;
         vector<flight> information;
-    }ThisUser;
-    vector<User> UsersInformation;
-    
->>>>>>> 524c6e60800353a1f6696a20bacdf069f2207f22
+    }ThisUser;                      //当前用户
+    vector<User> UsersInformation;  //记录所有用户的数组
+
     //公用相关函数
     bool int_compare(int, int);         //int比较，判断第一个int是否小于第二个int
     bool string_compare(string, string);//string比较，比较两个string,是否相同
     void print_flight_data(flight);     //输出航班信息
+    bool if_ticket(long long date,string flight_number);//用来判断是否有票
+    void other_choice(flight previous_choice);//没有票时的其他选择
 
     //航班数组（用于第七题和第九题）
     vector<queue<int>> flight_queue(long long,long long,string,string);
@@ -139,9 +137,6 @@ private:
             else return false;
         }
     };
-<<<<<<< HEAD
-
-=======
     //用于vector<User>的查找函数(自定义类的方式实现)
     class findu {
     private: string test;
@@ -152,8 +147,7 @@ private:
             else return false;
         }
     };
-    
->>>>>>> 524c6e60800353a1f6696a20bacdf069f2207f22
+
     //定义的相关输出函数 by 陆子旭
     void print_lzx(int);
 };
@@ -193,17 +187,65 @@ void Airplane_System::SignIn(string nam,string pas){
 
 //订票
 void Airplane_System::Booking(int){
-    
-}
+    int ticket_num;
+    ifstream infile("C:\Users\Administrator\Desktop\管理员信息.txt".c_str());
+    vector<User>user_sim;
+    User Administrator;
+    //读用户简化信息
+    while(infile.good()){
+    infile>>Administrator.name;
+    infile>>Administrator.IsAdministrator;
+    infile>>Administrator.password;
+    infile>>ticket_num;
+    for(int i=0;i<ticket_num;i++){
+        infile>>Administrator.information[i].flight_number;
+        infile>>Administrator.information[i].start_time;
+    user_sim.push_back(Administrator);
+    file.get(); if (file.peek()==EOF) break;
+    }
+    //读qq输入的想要查找的
+    ifstream QQinput(filepath.c_str());//此处filepath应为qq所输入的人名的文件
+    string name;
+    string num_date;
+    flight a;
+    bool ifexist=false;//该用户是否已经存在
+    int position;
+    int date;//将date——num分成航班号和时间
+    string number;//将date——num分成航班号和时间
+    Name>>name;
+    Name>>num_date;
+    number=num_date.substr(0,6);
+    date=num_date.substr(6,4);
+    for(position=0;position<user_sim.size();position++){
+        if(name==user_sim[position].name){
+            ifexist=true;
+            break;
+        }
+    }
+
+    if(ifexist){
+        if(if_ticket(date,number)){
+            cout<<"有票，订票成功";
+            a.flight_number=number;
+            a.start_time=date;
+            user_sim[position].information.push_back(a);
+            }
+        else{
+
+            }
+    }
+    else{
+
+        }
 
 //展示
 void Airplane_System::Show(){
-    
+
 }
 
 //退票
 void Airplane_System::Refund(int){
-    
+
 }
 
 //int比较，判断第一个int是否小于第二个int
@@ -310,7 +352,7 @@ void Airplane_System::dataloading(string file_address) {
     point temp_point;               //临时顶点节结点
     edge *temp_edge1,*temp_edge2;   //临时边结点
     vector<point>::iterator result; //vector迭代器 可以用auto！！！(这句话是某个对auto有执念的人加上的)
-    ifstream file(file_address);
+    std::ifstream file(file_address);
     //读表头
     if (!file.eof()) {
         file >> flight_table.starting_point;
@@ -562,6 +604,25 @@ void Airplane_System::best_route_recommended(int sort_bool=1,long long timef_boo
 
 
 //订票系统 by 杨溢
+//是否有票
+bool Airplane_System::if_ticket(long long date,string flight_number){
+    bool if_site;
+    int ticket_position
+    long long date1, date2;//表示日期
+    date1 = 2017e8+date*10000+0000;
+    date2 = 2017e8+date*10000+2359;
+    for (ticket_position=0;ticket_position<total&&if_site==0;ticket_position++){//用位置信息和起始城市进行匹配
+        if(date1<flight_totalnumber[ticket_position].start_time&&date2>flight_totalnumber[ticket_position].start_time&&flight_totalnumber[ticket_position].flight_number==flight_num){
+            if(flight_totalnumber[ticket_position].seat_number>flight_totalnumber[ticket_position].book_number){//有空位
+                if_site=1;
+                flight_totalnumber[ticket_position].book_number++;
+                break;
+            }
+        }
+    }
+    return bool;
+}
+//没有票时的其他选择
 void Airplane_System::ticktet_booking(){
     int if_site=0; //是否有符合条件的
     vector<int>the_other_choice;
