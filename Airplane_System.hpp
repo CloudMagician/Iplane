@@ -71,7 +71,7 @@ private:
     int number_of_city;                 //开放航线的城市个数
     int total;                          //航班总数
     vector <flight> flight_totalnumber; //flight数组(暂时不得进行排序，删除，添加元素等操作)
-    
+
     //邻接表相关
     //边链表
     struct edge
@@ -87,15 +87,15 @@ private:
         edge* address;      //边链表的头指针
     };
     vector <point> point_link;          //邻接表顶点数组
-    
+
     //公用相关函数
     bool int_compare(int, int);         //int比较，判断第一个int是否小于第二个int
     bool string_compare(string, string);//string比较，比较两个string,是否相同
     void print_flight_data(flight);     //输出航班信息
-    
+
     //航班数组（用于第七题和第九题）
     vector<queue<int>> flight_queue(long long,long long,string,string);
-    
+
     //用于vector的相关函数
     //用于vector<flight>的起始时间排序函数
     static bool vector_start_time_compare(const flight &a, const flight &b){
@@ -115,7 +115,7 @@ private:
             else return false;
         }
     };
-    
+
     //定义的相关输出函数 by 陆子旭
     void print_lzx(int);
 };
@@ -537,6 +537,11 @@ void Airplane_System::ticktet_booking(){
     if(if_site==1){//有符合条件的航班
         cout<<"订票成功";
     }
+}
+int main(){
+Airplane_System a;
+a.ticktet_booking();
+return 0;
 }
 
 #endif /* Airplane_System_hpp */
