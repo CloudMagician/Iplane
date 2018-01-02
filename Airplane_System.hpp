@@ -226,7 +226,10 @@ bool Airplane_System::string_compare(string temp_first, string temp_last){
 
 //输出航班信息
 void Airplane_System::print_flight_data(flight temp){
-    cout << temp.flight_number << '\t' << temp.starting_point << '\t' << temp.finishing_point <<'\t'<< temp.start_time << '\t' << temp.finish_time << '\t' << temp.price << '\t'<<temp.discount<< '\t'<< temp.company << '\t' << temp.seat_number << '\t' << temp.book_number << endl;
+    cout << temp.flight_number << '\t' << temp.starting_point << '\t' << temp.fin
+		ishing_point <<'\t'<< temp.start_time << '\t' << temp.finish_time << '\t' << temp.price 
+		<< '\t'<<temp.discount<< '\t'<< temp.company << '\t' << temp.seat_number << '\t' << te
+		mp.book_number << endl;
 }
 
 //航班数组（用于第七题和第九题 by 陆子旭
