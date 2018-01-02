@@ -15,11 +15,12 @@
 #include <vector>
 #include "Airplane_System.hpp"
 
-using namespace std;
 int main(int argc, const char * argv[]) {
-    Airplane_System test;
-    test.dataloading("/Users/luzixu/Documents/my project/Iplane/Iplane/File");
-    //    test.flight_list(4,201710310000,201712310000,"长春","北京");
-    test.best_route_recommended(1,201711150000,201711220000,"长春","北京");
+    Airplane_System test("/Users/luzixu/Documents/my project/Iplane/Iplane/File",
+                         "/Users/luzixu/Documents/my project/Iplane/Iplane/UserInformation",
+                         "/Users/luzixu/Documents/my project/Iplane/Iplane/Out",
+                         "/Users/luzixu/Documents/my project/Iplane/Iplane/Bool");
+    test.dataloading();
+    test.flight_recommended(201711310000,201712150000,"长春","北京");
     return 0;
 }
