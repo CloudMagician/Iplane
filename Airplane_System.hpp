@@ -41,8 +41,18 @@ public:
 class Airplane_System
 {
 public:
+    //基本函数
     Airplane_System();                                          //构造函数
     ~Airplane_System();                                         //析构函数
+    
+    //用户方面
+    void Register(string,string,bool);                          //注册
+    void SignIn(string,string);                                 //登录
+    void Booking(int);                                          //订票
+    void Show();                                                //展示
+    void Refund(int);                                           //退票
+    
+    //题目要求
     void dataloading(string);                                   //航班信息录入
     void current_information_view();                            //航班信息浏览
     void check_information();                                   //航班信息查询
@@ -88,6 +98,16 @@ private:
     };
     vector <point> point_link;          //邻接表顶点数组
     
+    //用户相关
+    //一个用户
+    struct User{
+        string name;
+        string password;
+        bool IsAdministrator;
+        vector<flight> information;
+    }ThisUser;
+    vector<User> UsersInformation;
+    
     //公用相关函数
     bool int_compare(int, int);         //int比较，判断第一个int是否小于第二个int
     bool string_compare(string, string);//string比较，比较两个string,是否相同
@@ -115,10 +135,22 @@ private:
             else return false;
         }
     };
+    //用于vector<User>的查找函数(自定义类的方式实现)
+    class findu {
+    private: string test;
+    public:
+        findu(const string str):test(str) {}
+        bool operator()(User& dValue) {
+            if(dValue.name == test) return true;
+            else return false;
+        }
+    };
     
     //定义的相关输出函数 by 陆子旭
     void print_lzx(int);
 };
+
+
 
 //构造函数
 Airplane_System::Airplane_System(){
@@ -126,6 +158,44 @@ Airplane_System::Airplane_System(){
 
 //析构函数
 Airplane_System::~Airplane_System(){
+}
+
+//注册
+void Airplane_System::Register(string nam,string pas,bool bo){
+    User temp;
+    temp.name = nam;
+    temp.password = pas;
+    temp.IsAdministrator = bo;
+    UsersInformation.push_back(temp);
+}
+
+//登录
+void Airplane_System::SignIn(string nam,string pas){
+    vector<User>::iterator result = find_if(UsersInformation.begin(),UsersInformation.end(),findu(nam));
+    if (result == UsersInformation.end()) {
+        print_lzx(-2);
+    }else{
+        if (result->password == pas) {
+            ThisUser = *result;
+        }else{
+            print_lzx(-2);
+        }
+    }
+}
+
+//订票
+void Airplane_System::Booking(int){
+    
+}
+
+//展示
+void Airplane_System::Show(){
+    
+}
+
+//退票
+void Airplane_System::Refund(int){
+    
 }
 
 //int比较，判断第一个int是否小于第二个int
