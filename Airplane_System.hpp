@@ -221,7 +221,7 @@ void Airplane_System::ReadUsers() {
         }
         UsersInformation.push_back(temp_user);
         temp_user.information.clear();
-        file.get(); file.get(); if (file.peek() == EOF) break;
+        file.get();file.get(); if (file.peek() == EOF) break;
     }
 }
 
@@ -505,6 +505,14 @@ void Airplane_System::ticket_booking(string user_name, string flight_num, long l
                 else {
                     result->information.push_back(flight_totalnumber[i]);
                 }
+                for (result = UsersInformation.begin(); result != UsersInformation.end(); result++) {
+                    for (vector<flight>::iterator j = result->information.begin();
+                         j != result->information.end(); j++) {
+                        if (j->flight_number == flight_num && j->start_time == time) {
+                            *j = flight_totalnumber[i];
+                        }
+                    }
+                }
             }
             else {
                 print_lzx(-2);
@@ -542,6 +550,14 @@ void Airplane_System::ticket_returning(string user_name, string flight_num, long
                     vector<flight>::iterator j =
                     find_if(result->information.begin(), result->information.end(), findi(flight_num, time));
                     j = result->information.erase(j);
+                }
+                for (result = UsersInformation.begin(); result != UsersInformation.end(); result++) {
+                    for (vector<flight>::iterator j = result->information.begin();
+                         j != result->information.end(); j++) {
+                        if (j->flight_number == flight_num && j->start_time == time) {
+                            *j = flight_totalnumber[i];
+                        }
+                    }
                 }
             }
             else {
