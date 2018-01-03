@@ -221,7 +221,7 @@ void Airplane_System::ReadUsers() {
         }
         UsersInformation.push_back(temp_user);
         temp_user.information.clear();
-        file.get(); if (file.peek() == EOF) break;
+        file.get(); file.get(); if (file.peek() == EOF) break;
     }
 }
 
