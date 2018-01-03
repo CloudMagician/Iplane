@@ -259,24 +259,24 @@ void Airplane_System::Register(string nam, string pas, bool bo)
 //参数分别为：
 //用户名（nam）；
 //密码（pas）；
+//BoolFile里面：0：用户名没找到；1：全部成功；1 0：密码错误；
 void Airplane_System::SignIn(string nam, string pas) {
     ReadUsers();
     vector<User>::iterator result = find_if(UsersInformation.begin(), UsersInformation.end(), findu(nam));
     if (result == UsersInformation.end()) {
         print_lzx(-2);
         return;
-    }
-    else
-    {
+    }else{
+        print_lzx(-1);
         if (result->password == pas) {
             ThisUser = *result;
-        }
-        else {
-            print_lzx(-2);
+        }else{
+            ofstream file(BoolFile,ios::app);
+            file << '\t' << 0;
+            file.close();
             return;
         }
     }
-    print_lzx(-1);
 }
 
 //输出航班信息 by 陆子旭
